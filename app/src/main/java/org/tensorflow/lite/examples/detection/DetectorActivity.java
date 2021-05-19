@@ -16,6 +16,7 @@
 
 package org.tensorflow.lite.examples.detection;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -84,8 +85,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private MultiBoxTracker tracker;
 
     private BorderedText borderedText;
-
-    private final Logger logger = new Logger();
 
 
     @Override
@@ -214,8 +213,14 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
                         for (final Classifier.Recognition result : results) {
                             final RectF location = result.getLocation();
+
+
                             if (location != null && result.getConfidence() >= minimumConfidence) {
                                 canvas.drawRect(location, paint);
+
+//                                //BOUNDING BOX COORDINATES
+//                                LOGGER.i("4 edges: " + location.toString() + " width: " + location.width() + " height: " + location.height());
+//                                LOGGER.i("centre X : " + location.centerX() + " centre Y: " + location.centerY());
 
                                 cropToFrameTransform.mapRect(location);
 
@@ -267,4 +272,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     protected void setNumThreads(final int numThreads) {
         runInBackground(() -> detector.setNumThreads(numThreads));
     }
+
+
 }

@@ -16,6 +16,7 @@ limitations under the License.
 package org.tensorflow.lite.examples.detection.tracking;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -67,6 +68,9 @@ public class MultiBoxTracker {
   private int frameWidth;
   private int frameHeight;
   private int sensorOrientation;
+
+  private static final int SCREEN_WIDTH = getScreenWidth();
+  private static final int SCREEN_HEIGHT = getScreenHeight();
 
   public MultiBoxTracker(final Context context) {
     for (final int color : COLORS) {
@@ -141,6 +145,7 @@ public class MultiBoxTracker {
       boxPaint.setColor(recognition.color);
 
       float cornerSize = Math.min(trackedPos.width(), trackedPos.height()) / 8.0f;
+
       canvas.drawRoundRect(trackedPos, cornerSize, cornerSize, boxPaint);
 
       final String labelString =
@@ -168,6 +173,10 @@ public class MultiBoxTracker {
 
       final RectF detectionScreenRect = new RectF();
       rgbFrameToScreen.mapRect(detectionScreenRect, detectionFrameRect);
+
+      //BOUNDING BOX COORDINATES
+      logger.i("4 edges: " + result.getLocation().toString() + " width: " + result.getLocation().width() + " height: " + result.getLocation().height());
+      logger.i("centre X : " + result.getLocation().centerX() + " centre Y: " + result.getLocation().centerY());
 
       logger.v(
           "Result! Frame: " + result.getLocation() + " mapped to screen:" + detectionScreenRect);
@@ -207,5 +216,14 @@ public class MultiBoxTracker {
     float detectionConfidence;
     int color;
     String title;
+  }
+
+  //GET SCREEN WIDTH AND HEIGHT OF DEVICE (EXCLUDING NAVIGATION BAR)
+  public static int getScreenWidth() {
+    return Resources.getSystem().getDisplayMetrics().widthPixels;
+  }
+
+  public static int getScreenHeight() {
+    return Resources.getSystem().getDisplayMetrics().heightPixels;
   }
 }

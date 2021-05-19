@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.5f;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }).start();
 
         });
-        this.sourceBitmap = Utils.getBitmapFromAsset(MainActivity.this, "kite.jpg");
+        this.sourceBitmap = Utils.getBitmapFromAsset(MainActivity.this, "mask.jpeg");
 
         this.cropBitmap = Utils.processBitmap(sourceBitmap, TF_OD_API_INPUT_SIZE);
 
@@ -147,8 +148,11 @@ public class MainActivity extends AppCompatActivity {
 
         for (final Classifier.Recognition result : results) {
             final RectF location = result.getLocation();
+            //BOUNDING BOX COORDINATES
             if (location != null && result.getConfidence() >= MINIMUM_CONFIDENCE_TF_OD_API) {
+                //DRAWS THE BOUNDING BOX
                 canvas.drawRect(location, paint);
+
 //                cropToFrameTransform.mapRect(location);
 //
 //                result.setLocation(location);
@@ -159,4 +163,6 @@ public class MainActivity extends AppCompatActivity {
 //        trackingOverlay.postInvalidate();
         imageView.setImageBitmap(bitmap);
     }
+
+
 }
